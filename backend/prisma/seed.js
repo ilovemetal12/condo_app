@@ -11,7 +11,7 @@ async function main() {
   // 1. Super Admin (no tenant)
   const superAdmin = await prisma.user.upsert({
     where: { email: 'superadmin@condosaas.com' },
-    update: {},
+    update: { password },
     create: {
       email: 'superadmin@condosaas.com',
       password,
@@ -42,25 +42,28 @@ async function main() {
   });
   console.log('Tenant:', tenant.name);
 
-  // 3. Community
-  const community = await prisma.community.upsert({
-    where: { id: tenant.id },
-    update: {},
-    create: {
-      tenantId: tenant.id,
-      name: 'Torres del Parque',
-      address: 'Calle 45 #12-30',
-      city: 'Bogota',
-      state: 'Cundinamarca',
-      country: 'CO',
-    },
+  // 3. Community - find or create
+  let community = await prisma.community.findFirst({
+    where: { tenantId: tenant.id, name: 'Torres del Parque' },
   });
+  if (!community) {
+    community = await prisma.community.create({
+      data: {
+        tenantId: tenant.id,
+        name: 'Torres del Parque',
+        address: 'Calle 45 #12-30',
+        city: 'Bogota',
+        state: 'Cundinamarca',
+        country: 'CO',
+      },
+    });
+  }
   console.log('Community:', community.name);
 
   // 4. Community Admin
   const communityAdmin = await prisma.user.upsert({
     where: { email: 'admin@lospinos.com' },
-    update: {},
+    update: { password, tenantId: tenant.id, communityId: community.id },
     create: {
       email: 'admin@lospinos.com',
       password,
@@ -77,7 +80,7 @@ async function main() {
   // 5. Reception user
   const reception = await prisma.user.upsert({
     where: { email: 'recepcion@lospinos.com' },
-    update: {},
+    update: { password, tenantId: tenant.id, communityId: community.id },
     create: {
       email: 'recepcion@lospinos.com',
       password,
@@ -91,38 +94,44 @@ async function main() {
   });
   console.log('Reception:', reception.email);
 
-  // 6. Create a unit
-  const unit = await prisma.unit.upsert({
-    where: { communityId_identifier: { communityId: community.id, identifier: 'Apt 301' } },
-    update: {},
-    create: {
-      communityId: community.id,
-      identifier: 'Apt 301',
-      block: 'Torre A',
-      floor: '3',
-      type: 'apartment',
-    },
+  // 6. Unit - find or create
+  let unit = await prisma.unit.findFirst({
+    where: { communityId: community.id, identifier: 'Apt 301' },
   });
+  if (!unit) {
+    unit = await prisma.unit.create({
+      data: {
+        communityId: community.id,
+        identifier: 'Apt 301',
+        block: 'Torre A',
+        floor: '3',
+        type: 'apartment',
+      },
+    });
+  }
 
-  // 7. Create a resident
-  await prisma.resident.upsert({
-    where: { id: unit.id },
-    update: {},
-    create: {
-      unitId: unit.id,
-      firstName: 'Ana',
-      lastName: 'Gomez',
-      email: 'ana.gomez@email.com',
-      phone: '3001234567',
-      isOwner: true,
-      moveInDate: new Date('2024-01-15'),
-    },
+  // 7. Resident record - find or create
+  const existingResident = await prisma.resident.findFirst({
+    where: { unitId: unit.id, email: 'ana.gomez@email.com' },
   });
+  if (!existingResident) {
+    await prisma.resident.create({
+      data: {
+        unitId: unit.id,
+        firstName: 'Ana',
+        lastName: 'Gomez',
+        email: 'ana.gomez@email.com',
+        phone: '3001234567',
+        isOwner: true,
+        moveInDate: new Date('2024-01-15'),
+      },
+    });
+  }
 
-  // 8. Resident user (linked to tenant/community)
+  // 8. Resident user
   const resident = await prisma.user.upsert({
     where: { email: 'residente@lospinos.com' },
-    update: {},
+    update: { password, tenantId: tenant.id, communityId: community.id },
     create: {
       email: 'residente@lospinos.com',
       password,
@@ -136,13 +145,17 @@ async function main() {
   });
   console.log('Resident:', resident.email);
 
-  console.log('\n--- All credentials use password: admin123 ---');
-  console.log('Seeding complete.');
+  console.log('\n--- Credentials (all use password: admin123) ---');
+  console.log('superadmin@condosaas.com  - Super Admin');
+  console.log('admin@lospinos.com       - Community Admin');
+  console.log('recepcion@lospinos.com   - Reception');
+  console.log('residente@lospinos.com   - Resident');
+  console.log('\nSeeding complete.');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Seed error:', e);
     process.exit(1);
   })
   .finally(async () => {
