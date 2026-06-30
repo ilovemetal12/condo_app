@@ -37,7 +37,7 @@ app.get(/^\/(?!api).*/, (req, res) => {
 // Global error handler (must be last)
 app.use(errorHandler);
 
-app.listen(env.port, () => {
+app.listen(env.port, '0.0.0.0', () => {
   console.log(`CondoSaaS API running on port ${env.port} [${env.nodeEnv}]`);
 });
 
