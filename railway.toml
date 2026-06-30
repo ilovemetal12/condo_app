@@ -2,6 +2,6 @@
 buildCommand = "npm install --prefix frontend --include=dev && npm run build --prefix frontend && npm install --prefix backend && cd backend && npx prisma generate"
 
 [deploy]
-startCommand = "cd backend && npx prisma migrate deploy && node src/app.js"
+startCommand = "cd backend && npx prisma db push && node prisma/seed.js && node src/app.js"
 healthcheckPath = "/api/health"
 restartPolicyType = "ON_FAILURE"
