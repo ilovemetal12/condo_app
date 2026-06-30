@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -11,7 +12,7 @@ const tenantRoutes = require('./modules/tenants/tenant.routes');
 const app = express();
 
 // Security & parsing
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -20,9 +21,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tenants', tenantRoutes);
+
+// Serve frontend static files (built by Vite into ../frontend/dist)
+const clientDistPath = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(clientDistPath));
+
+// SPA fallback: any non-API route returns index.html
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+});
 
 // Global error handler (must be last)
 app.use(errorHandler);

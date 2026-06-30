@@ -1,18 +1,18 @@
 # CondoSaaS — Railway Deployment Guide
 
-## Architecture on Railway
+## Architecture
 
-You'll create **3 services** in a single Railway project:
+Single-service deploy: Railway builds the frontend, then runs the backend which serves both the API and the frontend static files from the same origin.
 
 ```
-┌─────────────────────────────────────────┐
-│          Railway Project                │
-│                                         │
-│  ┌───────────┐  ┌────────┐  ┌───────┐  │
-│  │  Frontend │  │Backend │  │Postgres│  │
-│  │  (nginx)  │──│(Node)  │──│  (DB)  │  │
-│  └───────────┘  └────────┘  └───────┘  │
-└─────────────────────────────────────────┘
+┌───────────────────────────────────────┐
+│        Railway Project                │
+│                                       │
+│  ┌─────────────────┐   ┌──────────┐  │
+│  │  App Service     │   │ Postgres │  │
+│  │  (API + Static)  │───│   (DB)   │  │
+│  └─────────────────┘   └──────────┘  │
+└───────────────────────────────────────┘
 ```
 
 ## Step-by-step
@@ -23,96 +23,91 @@ Go to [railway.app](https://railway.app) and create a new project.
 
 ### 2. Add PostgreSQL
 
-- Click "New Service" → "Database" → "PostgreSQL"
+- Click **"New"** → **"Database"** → **"PostgreSQL"**
 - Railway auto-generates the `DATABASE_URL` variable
 
-### 3. Deploy Backend
+### 3. Deploy the App
 
-- Click "New Service" → "GitHub Repo" (or "Deploy from Local")
-- Set the **root directory** to `backend`
-- Railway will detect the `railway.toml` and use the Dockerfile
+- Click **"New"** → **"GitHub Repo"** → select `condo_app`
+- Railway detects `railway.toml` at root and uses it automatically
+- **No root directory needed** — it builds from the repo root
 
-**Environment variables to set:**
+The `railway.toml` handles:
+- **Build**: installs frontend deps, builds React app, installs backend deps, generates Prisma client
+- **Deploy**: runs Prisma migrations, starts the Express server (which serves both API + frontend)
 
-| Variable | Value | Notes |
-|----------|-------|-------|
-| `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` | Reference the Postgres service |
-| `JWT_SECRET` | *(generate a strong random string)* | `openssl rand -base64 32` |
-| `JWT_EXPIRES_IN` | `15m` | Access token lifetime |
-| `JWT_REFRESH_EXPIRES_IN` | `7d` | Refresh token lifetime |
-| `NODE_ENV` | `production` | |
-| `ALLOWED_ORIGINS` | `https://your-frontend.up.railway.app` | Comma-separated if multiple |
-| `PORT` | `3001` | Railway assigns automatically, but set for clarity |
+### 4. Set Environment Variables
 
-### 4. Deploy Frontend
+Go to the app service → **Variables** tab:
 
-- Click "New Service" → "GitHub Repo" (or "Deploy from Local")
-- Set the **root directory** to `frontend`
-- Railway will detect the `railway.toml` and use the Dockerfile
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | Click **"Add Reference"** → select PostgreSQL service → `DATABASE_URL` |
+| `JWT_SECRET` | Generate: `openssl rand -base64 32` |
+| `JWT_EXPIRES_IN` | `15m` |
+| `JWT_REFRESH_EXPIRES_IN` | `7d` |
+| `NODE_ENV` | `production` |
+| `PORT` | `3001` |
 
-**Build-time environment variable:**
+> No `ALLOWED_ORIGINS` or `VITE_API_URL` needed — everything runs on the same domain.
 
-| Variable | Value | Notes |
-|----------|-------|-------|
-| `VITE_API_URL` | `https://your-backend.up.railway.app/api` | Points to the backend service |
+### 5. Generate a Public Domain
 
-> Railway injects build-time env vars during the Docker build. For Vite, prefix with `VITE_`.
+Go to app service → **Settings** → **Networking** → **"Generate Domain"**
 
-### 5. Run Initial Seed (one-time)
+Your app will be live at `https://your-app.up.railway.app`
 
-After the first deploy, run the seed to create the super admin:
+### 6. Run the Seed (one time)
+
+After first deploy, seed the database with the admin user:
 
 ```bash
 # Via Railway CLI
-railway run --service backend -- node prisma/seed.js
-
-# Or via Railway dashboard → Backend service → Settings → Run Command
-node prisma/seed.js
+railway run -- node backend/prisma/seed.js
 ```
 
-## Custom Domain (Optional)
-
-1. Go to each service → Settings → Networking
-2. Click "Generate Domain" for a `*.up.railway.app` subdomain
-3. Or add your custom domain and configure DNS
-
-## Environment Variable Reference
-
-### Backend (required)
-
-```env
-DATABASE_URL=postgresql://...     # From Railway Postgres
-JWT_SECRET=your-secret-here       # Strong random string
-JWT_EXPIRES_IN=15m
-JWT_REFRESH_EXPIRES_IN=7d
-NODE_ENV=production
-ALLOWED_ORIGINS=https://your-frontend-domain.com
+Or temporarily add to the start command in railway.toml:
 ```
-
-### Frontend (build-time)
-
-```env
-VITE_API_URL=https://your-backend-domain.com/api
+startCommand = "cd backend && npx prisma migrate deploy && node prisma/seed.js && node src/app.js"
 ```
+Deploy once, then remove `node prisma/seed.js` from the command.
 
-## Local Development with Docker
+## Local Development
 
 ```bash
-# Start everything (postgres + backend + frontend)
-docker compose up --build
+# Start Postgres
+docker compose up -d
 
-# Access:
-# Frontend: http://localhost:5173
-# Backend:  http://localhost:3001
-# Postgres: localhost:5432
+# Install all dependencies
+npm run install:all
 
-# Stop
-docker compose down
+# Run database migration
+npm run db:migrate
 
-# Reset database
-docker compose down -v
-docker compose up --build
+# Seed database
+npm run db:seed
+
+# Terminal 1: Backend (port 3001)
+npm run dev:backend
+
+# Terminal 2: Frontend (port 5173, proxies API to 3001)
+npm run dev:frontend
 ```
+
+### Vite Dev Proxy
+
+During local development, the frontend dev server (port 5173) proxies `/api` requests to the backend (port 3001) via the Vite config. In production, they're the same server.
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `JWT_SECRET` | Yes | Strong random string for signing tokens |
+| `JWT_EXPIRES_IN` | No | Access token lifetime (default: `15m`) |
+| `JWT_REFRESH_EXPIRES_IN` | No | Refresh token lifetime (default: `7d`) |
+| `NODE_ENV` | No | `production` or `development` |
+| `PORT` | No | Server port (default: `3001`) |
 
 ## Login Credentials (from seed)
 
