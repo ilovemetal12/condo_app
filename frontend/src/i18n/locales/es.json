@@ -1,0 +1,85 @@
+{
+  "common": {
+    "appName": "CondoSaaS",
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "actions": "Acciones",
+    "status": "Estado",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "confirm": "Confirmar",
+    "back": "Volver",
+    "noResults": "No se encontraron resultados",
+    "roles": {
+      "super_admin": "Super Admin",
+      "community_admin": "Administrador",
+      "reception": "Recepcion",
+      "resident": "Residente"
+    }
+  },
+  "auth": {
+    "signIn": "Iniciar sesion",
+    "signOut": "Cerrar sesion",
+    "email": "Correo electronico",
+    "password": "Contrasena",
+    "emailPlaceholder": "tu@empresa.com",
+    "passwordPlaceholder": "Ingresa tu contrasena",
+    "loginTitle": "Bienvenido de nuevo",
+    "loginSubtitle": "Inicia sesion para gestionar tus comunidades",
+    "loginError": "Correo o contrasena invalidos",
+    "loginButton": "Iniciar sesion",
+    "secureAccess": "Acceso seguro para personal autorizado"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "tenants": "Organizaciones",
+    "communities": "Comunidades",
+    "units": "Unidades",
+    "residents": "Residentes",
+    "employees": "Empleados",
+    "visitors": "Visitantes",
+    "packages": "Paquetes",
+    "documents": "Documentos",
+    "announcements": "Anuncios",
+    "pqrs": "Solicitudes",
+    "settings": "Configuracion"
+  },
+  "dashboard": {
+    "welcomeBack": "Bienvenido, {{name}}",
+    "overview": "Este es un resumen de tu plataforma.",
+    "communities": "Comunidades",
+    "units": "Unidades",
+    "residents": "Residentes",
+    "packages": "Paquetes",
+    "getStarted": "Comienza aqui",
+    "getStartedDesc": "Crea tu primera comunidad para gestionar unidades, residentes, visitantes y mas."
+  },
+  "tenants": {
+    "title": "Organizaciones",
+    "createNew": "Nueva organizacion",
+    "name": "Nombre",
+    "slug": "Identificador",
+    "plan": "Plan",
+    "status": "Estado",
+    "communities": "Comunidades",
+    "users": "Usuarios"
+  },
+  "settings": {
+    "theme": "Apariencia",
+    "lightMode": "Claro",
+    "darkMode": "Oscuro",
+    "language": "Idioma",
+    "english": "Ingles",
+    "spanish": "Espanol"
+  },
+  "profile": {
+    "title": "Perfil",
+    "signOut": "Cerrar sesion"
+  }
+}

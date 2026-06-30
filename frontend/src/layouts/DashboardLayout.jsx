@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   AppBar,
@@ -16,25 +17,30 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Chip,
   Fade,
+  ToggleButtonGroup,
+  ToggleButton,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
-  Dashboard as DashboardIcon,
-  Business as BusinessIcon,
-  Logout as LogoutIcon,
-  Person as PersonIcon,
-  ApartmentRounded,
+  DashboardRounded,
+  BusinessRounded,
+  LogoutRounded,
+  PersonRounded,
+  LightMode,
+  DarkMode,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { useThemeMode } from '../contexts/ThemeContext';
 
-const DRAWER_WIDTH = 270;
+const DRAWER_WIDTH = 256;
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
+  const { mode, toggleTheme } = useThemeMode();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t, i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -44,47 +50,39 @@ export default function DashboardLayout() {
     navigate('/login');
   };
 
+  const handleLanguageChange = (e, val) => {
+    if (val) {
+      i18n.changeLanguage(val);
+      localStorage.setItem('app-language', val);
+    }
+  };
+
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: t('nav.dashboard'), icon: <DashboardRounded />, path: '/dashboard' },
   ];
 
   if (user?.role === 'super_admin') {
-    menuItems.push({ text: 'Tenants', icon: <BusinessIcon />, path: '/dashboard/tenants' });
+    menuItems.push({ text: t('nav.tenants'), icon: <BusinessRounded />, path: '/dashboard/tenants' });
   }
 
   const isActive = (path) => location.pathname === path;
 
+  const roleName = t(`common.roles.${user?.role}`) || user?.role;
+
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', py: 1 }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', py: 2 }}>
       {/* Brand */}
-      <Box sx={{ px: 2.5, py: 2, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Box
-          sx={{
-            width: 36,
-            height: 36,
-            borderRadius: 2,
-            bgcolor: 'primary.main',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <ApartmentRounded sx={{ fontSize: 20, color: 'white' }} />
-        </Box>
-        <Box>
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'text.primary', lineHeight: 1.2 }}>
-            CondoSaaS
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            Management Platform
-          </Typography>
-        </Box>
+      <Box sx={{ px: 2.5, mb: 3 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
+          CondoSaaS
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          Management Platform
+        </Typography>
       </Box>
 
-      <Divider sx={{ mx: 2, my: 1 }} />
-
       {/* Navigation */}
-      <List sx={{ flex: 1, px: 1 }}>
+      <List sx={{ flex: 1, px: 1.5 }}>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
             <ListItemButton
@@ -93,41 +91,43 @@ export default function DashboardLayout() {
                 navigate(item.path);
                 setMobileOpen(false);
               }}
-              sx={{ py: 1.2 }}
+              sx={{
+                py: 1,
+                '&.Mui-selected': {
+                  bgcolor: 'primary.main',
+                  color: 'primary.contrastText',
+                  '& .MuiListItemIcon-root': { color: 'primary.contrastText' },
+                  '&:hover': { bgcolor: 'primary.dark' },
+                },
+              }}
             >
-              <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 36, color: isActive(item.path) ? 'inherit' : 'text.secondary' }}>
+                {item.icon}
+              </ListItemIcon>
               <ListItemText
                 primary={item.text}
-                primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: isActive(item.path) ? 600 : 400 }}
+                primaryTypographyProps={{
+                  fontSize: '0.875rem',
+                  fontWeight: isActive(item.path) ? 600 : 400,
+                }}
               />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      {/* User card at bottom */}
-      <Box sx={{ p: 2 }}>
-        <Box
-          sx={{
-            p: 1.5,
-            borderRadius: 3,
-            bgcolor: '#f8fafc',
-            border: '1px solid',
-            borderColor: 'divider',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1.5,
-          }}
-        >
-          <Avatar sx={{ width: 34, height: 34, bgcolor: 'primary.main', fontSize: '0.85rem' }}>
+      {/* User info at bottom */}
+      <Box sx={{ px: 2, pt: 2, borderTop: 1, borderColor: 'divider' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main', fontSize: '0.8rem' }}>
             {user?.firstName?.[0]}{user?.lastName?.[0]}
           </Avatar>
           <Box sx={{ minWidth: 0, flex: 1 }}>
             <Typography variant="body2" sx={{ fontWeight: 600, lineHeight: 1.2 }} noWrap>
               {user?.firstName} {user?.lastName}
             </Typography>
-            <Typography variant="caption" color="text.secondary" noWrap sx={{ textTransform: 'capitalize' }}>
-              {user?.role?.replace('_', ' ')}
+            <Typography variant="caption" color="text.secondary" noWrap>
+              {roleName}
             </Typography>
           </Box>
         </Box>
@@ -155,7 +155,12 @@ export default function DashboardLayout() {
           variant="permanent"
           sx={{
             display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': { width: DRAWER_WIDTH, bgcolor: 'background.paper' },
+            '& .MuiDrawer-paper': {
+              width: DRAWER_WIDTH,
+              bgcolor: 'background.paper',
+              borderRight: 1,
+              borderColor: 'divider',
+            },
           }}
           open
         >
@@ -169,7 +174,7 @@ export default function DashboardLayout() {
           position="sticky"
           color="inherit"
           elevation={0}
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
+          sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'background.paper' }}
         >
           <Toolbar sx={{ gap: 1 }}>
             <IconButton
@@ -180,13 +185,27 @@ export default function DashboardLayout() {
               <MenuIcon />
             </IconButton>
             <Box sx={{ flex: 1 }} />
-            <Chip
-              label={user?.role?.replace('_', ' ')}
+
+            {/* Language toggle */}
+            <ToggleButtonGroup
               size="small"
-              sx={{ textTransform: 'capitalize', fontWeight: 500, bgcolor: '#eff6ff', color: 'primary.main' }}
-            />
+              value={i18n.language}
+              exclusive
+              onChange={handleLanguageChange}
+              sx={{ '& .MuiToggleButton-root': { px: 1.2, py: 0.3, fontSize: '0.7rem' } }}
+            >
+              <ToggleButton value="en">EN</ToggleButton>
+              <ToggleButton value="es">ES</ToggleButton>
+            </ToggleButtonGroup>
+
+            {/* Theme toggle */}
+            <IconButton onClick={toggleTheme} size="small">
+              {mode === 'light' ? <DarkMode fontSize="small" /> : <LightMode fontSize="small" />}
+            </IconButton>
+
+            {/* User menu */}
             <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} size="small">
-              <Avatar sx={{ width: 34, height: 34, bgcolor: 'primary.main', fontSize: '0.85rem' }}>
+              <Avatar sx={{ width: 30, height: 30, bgcolor: 'primary.main', fontSize: '0.75rem' }}>
                 {user?.firstName?.[0]}
               </Avatar>
             </IconButton>
@@ -196,10 +215,10 @@ export default function DashboardLayout() {
               onClose={() => setAnchorEl(null)}
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-              PaperProps={{ sx: { mt: 1, minWidth: 180, borderRadius: 3 } }}
+              PaperProps={{ sx: { mt: 1, minWidth: 180, borderRadius: 2 } }}
             >
               <MenuItem disabled sx={{ opacity: '1 !important' }}>
-                <PersonIcon sx={{ mr: 1.5, fontSize: 20, color: 'text.secondary' }} />
+                <PersonRounded sx={{ mr: 1.5, fontSize: 18, color: 'text.secondary' }} />
                 <Box>
                   <Typography variant="body2" fontWeight={600}>
                     {user?.firstName} {user?.lastName}
@@ -210,15 +229,16 @@ export default function DashboardLayout() {
                 </Box>
               </MenuItem>
               <Divider sx={{ my: 0.5 }} />
-              <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
-                <LogoutIcon sx={{ mr: 1.5, fontSize: 20 }} /> Sign out
+              <MenuItem onClick={handleLogout}>
+                <LogoutRounded sx={{ mr: 1.5, fontSize: 18 }} />
+                <Typography variant="body2">{t('profile.signOut')}</Typography>
               </MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
 
-        <Box component="main" sx={{ flex: 1, p: { xs: 2, sm: 3, md: 4 } }}>
-          <Fade in timeout={400}>
+        <Box component="main" sx={{ flex: 1, p: { xs: 2, sm: 3 } }}>
+          <Fade in timeout={300}>
             <Box>
               <Outlet />
             </Box>

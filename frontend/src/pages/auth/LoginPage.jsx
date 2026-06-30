@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   TextField,
@@ -11,17 +12,23 @@ import {
   InputAdornment,
   IconButton,
   Fade,
+  ToggleButtonGroup,
+  ToggleButton,
 } from '@mui/material';
 import {
   Visibility,
   VisibilityOff,
-  ApartmentRounded,
+  LightMode,
+  DarkMode,
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
+import { useThemeMode } from '../../contexts/ThemeContext';
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { mode, toggleTheme } = useThemeMode();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,114 +45,134 @@ export default function LoginPage() {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
-      const message = err.response?.data?.error?.message || 'Login failed. Please check your credentials.';
+      const message = err.response?.data?.error?.message || t('auth.loginError');
       setError(message);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleLanguageChange = (lng) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('app-language', lng);
+  };
+
   return (
-    <Fade in timeout={600}>
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 3, sm: 5 },
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 4,
-          maxWidth: 420,
-          mx: 'auto',
-        }}
-      >
-        {/* Logo / Brand */}
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Box
-            sx={{
-              width: 56,
-              height: 56,
-              borderRadius: 3,
-              bgcolor: 'primary.main',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              mx: 'auto',
-              mb: 2,
-            }}
+    <Fade in timeout={500}>
+      <Box>
+        {/* Top controls */}
+        <Box sx={{ position: 'fixed', top: 16, right: 16, display: 'flex', gap: 1, zIndex: 10 }}>
+          <ToggleButtonGroup
+            size="small"
+            value={i18n.language}
+            exclusive
+            onChange={(e, val) => val && handleLanguageChange(val)}
+            sx={{ bgcolor: 'background.paper', border: 1, borderColor: 'divider' }}
           >
-            <ApartmentRounded sx={{ fontSize: 32, color: 'white' }} />
+            <ToggleButton value="en" sx={{ px: 1.5, py: 0.5, fontSize: '0.75rem' }}>EN</ToggleButton>
+            <ToggleButton value="es" sx={{ px: 1.5, py: 0.5, fontSize: '0.75rem' }}>ES</ToggleButton>
+          </ToggleButtonGroup>
+          <IconButton
+            onClick={toggleTheme}
+            size="small"
+            sx={{ bgcolor: 'background.paper', border: 1, borderColor: 'divider' }}
+          >
+            {mode === 'light' ? <DarkMode fontSize="small" /> : <LightMode fontSize="small" />}
+          </IconButton>
+        </Box>
+
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 3, sm: 4 },
+            border: '1px solid',
+            borderColor: 'divider',
+            borderRadius: 3,
+            maxWidth: 400,
+            width: '100%',
+            mx: 'auto',
+          }}
+        >
+          {/* Header */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h5" sx={{ mb: 0.5 }}>
+              {t('auth.loginTitle')}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {t('auth.loginSubtitle')}
+            </Typography>
           </Box>
-          <Typography variant="h5" sx={{ mb: 0.5 }}>
-            CondoSaaS
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Residential community management
-          </Typography>
-        </Box>
 
-        {/* Error alert */}
-        {error && (
-          <Fade in>
-            <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
-              {error}
-            </Alert>
-          </Fade>
-        )}
+          {/* Error */}
+          {error && (
+            <Fade in>
+              <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
+                {error}
+              </Alert>
+            </Fade>
+          )}
 
-        {/* Form */}
-        <Box component="form" onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            margin="normal"
-            required
-            autoFocus
-            placeholder="you@company.com"
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            margin="normal"
-            required
-            placeholder="Enter your password"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                    size="small"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+          {/* Form */}
+          <Box component="form" onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label={t('auth.email')}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              required
+              autoFocus
+              placeholder={t('auth.emailPlaceholder')}
+              size="medium"
+            />
+            <TextField
+              fullWidth
+              label={t('auth.password')}
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              margin="normal"
+              required
+              placeholder={t('auth.passwordPlaceholder')}
+              size="medium"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      size="small"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            size="large"
-            disabled={loading || !email || !password}
-            sx={{ mt: 3, py: 1.5 }}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              size="large"
+              disabled={loading || !email || !password}
+              sx={{ mt: 3, py: 1.4 }}
+            >
+              {loading ? <CircularProgress size={20} color="inherit" /> : t('auth.loginButton')}
+            </Button>
+          </Box>
+
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ display: 'block', textAlign: 'center', mt: 3 }}
           >
-            {loading ? <CircularProgress size={22} color="inherit" /> : 'Sign In'}
-          </Button>
-        </Box>
-
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', textAlign: 'center', mt: 3 }}>
-          Secure access for authorized personnel only
-        </Typography>
-      </Paper>
+            {t('auth.secureAccess')}
+          </Typography>
+        </Paper>
+      </Box>
     </Fade>
   );
 }

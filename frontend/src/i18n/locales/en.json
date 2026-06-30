@@ -1,0 +1,85 @@
+{
+  "common": {
+    "appName": "CondoSaaS",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "actions": "Actions",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "confirm": "Confirm",
+    "back": "Back",
+    "noResults": "No results found",
+    "roles": {
+      "super_admin": "Super Admin",
+      "community_admin": "Admin",
+      "reception": "Reception",
+      "resident": "Resident"
+    }
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "you@company.com",
+    "passwordPlaceholder": "Enter your password",
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to manage your communities",
+    "loginError": "Invalid email or password",
+    "loginButton": "Sign in",
+    "secureAccess": "Secure access for authorized personnel"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tenants": "Organizations",
+    "communities": "Communities",
+    "units": "Units",
+    "residents": "Residents",
+    "employees": "Employees",
+    "visitors": "Visitors",
+    "packages": "Packages",
+    "documents": "Documents",
+    "announcements": "Announcements",
+    "pqrs": "Requests",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "welcomeBack": "Welcome back, {{name}}",
+    "overview": "Here is an overview of your platform.",
+    "communities": "Communities",
+    "units": "Units",
+    "residents": "Residents",
+    "packages": "Packages",
+    "getStarted": "Get started",
+    "getStartedDesc": "Create your first community to begin managing units, residents, visitors, and more."
+  },
+  "tenants": {
+    "title": "Organizations",
+    "createNew": "New organization",
+    "name": "Name",
+    "slug": "Slug",
+    "plan": "Plan",
+    "status": "Status",
+    "communities": "Communities",
+    "users": "Users"
+  },
+  "settings": {
+    "theme": "Appearance",
+    "lightMode": "Light",
+    "darkMode": "Dark",
+    "language": "Language",
+    "english": "English",
+    "spanish": "Spanish"
+  },
+  "profile": {
+    "title": "Profile",
+    "signOut": "Sign out"
+  }
+}

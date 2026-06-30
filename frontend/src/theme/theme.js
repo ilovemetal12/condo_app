@@ -1,126 +1,114 @@
 import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#2563eb',
-      light: '#60a5fa',
-      dark: '#1d4ed8',
-      contrastText: '#ffffff',
-    },
-    secondary: {
-      main: '#0d9488',
-      light: '#5eead4',
-      dark: '#0f766e',
-    },
-    background: {
-      default: '#f8fafc',
-      paper: '#ffffff',
-    },
-    text: {
-      primary: '#1e293b',
-      secondary: '#64748b',
-    },
-    divider: '#e2e8f0',
-    success: { main: '#10b981' },
-    warning: { main: '#f59e0b' },
-    error: { main: '#ef4444' },
-  },
-  typography: {
-    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    h4: { fontWeight: 700, letterSpacing: '-0.02em' },
-    h5: { fontWeight: 700, letterSpacing: '-0.01em' },
-    h6: { fontWeight: 600 },
-    subtitle1: { fontWeight: 500, color: '#64748b' },
-    body2: { color: '#64748b' },
-    button: { fontWeight: 600 },
-  },
-  shape: {
-    borderRadius: 12,
-  },
-  shadows: [
-    'none',
-    '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-    '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-    '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-    '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-    '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-    ...Array(19).fill('0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)'),
-  ],
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          fontWeight: 600,
-          borderRadius: 10,
-          padding: '10px 20px',
-        },
-        contained: {
-          boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.1)',
-          '&:hover': {
-            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-          },
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 16,
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.04)',
-          transition: 'box-shadow 0.2s ease, transform 0.2s ease',
-          '&:hover': {
-            boxShadow: '0 4px 12px 0 rgb(0 0 0 / 0.08)',
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            borderRadius: 10,
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#2563eb',
-            },
-          },
-        },
-      },
-    },
-    MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          border: 'none',
-          boxShadow: '1px 0 0 0 #e2e8f0',
-        },
-      },
-    },
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          boxShadow: 'none',
-          backdropFilter: 'blur(8px)',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        },
-      },
-    },
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 10,
-          margin: '2px 8px',
-          '&.Mui-selected': {
-            backgroundColor: '#eff6ff',
-            color: '#2563eb',
-            '& .MuiListItemIcon-root': { color: '#2563eb' },
-            '&:hover': { backgroundColor: '#dbeafe' },
-          },
-        },
-      },
-    },
-  },
-});
+const baseTypography = {
+  fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  h4: { fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.75rem' },
+  h5: { fontWeight: 700, letterSpacing: '-0.01em', fontSize: '1.4rem' },
+  h6: { fontWeight: 600, fontSize: '1.1rem' },
+  subtitle1: { fontWeight: 500 },
+  body1: { fontSize: '0.925rem', lineHeight: 1.6 },
+  body2: { fontSize: '0.85rem', lineHeight: 1.5 },
+  button: { fontWeight: 600, fontSize: '0.875rem' },
+};
 
-export default theme;
+const baseComponents = {
+  MuiButton: {
+    styleOverrides: {
+      root: {
+        textTransform: 'none',
+        fontWeight: 600,
+        borderRadius: 8,
+        padding: '9px 18px',
+        boxShadow: 'none',
+        '&:hover': { boxShadow: 'none' },
+      },
+      sizeSmall: { padding: '6px 12px', fontSize: '0.8rem' },
+    },
+  },
+  MuiCard: {
+    styleOverrides: {
+      root: {
+        borderRadius: 12,
+        boxShadow: 'none',
+      },
+    },
+  },
+  MuiTextField: {
+    styleOverrides: {
+      root: {
+        '& .MuiOutlinedInput-root': { borderRadius: 8 },
+      },
+    },
+  },
+  MuiListItemButton: {
+    styleOverrides: {
+      root: {
+        borderRadius: 8,
+        margin: '2px 0',
+        padding: '8px 12px',
+      },
+    },
+  },
+  MuiDrawer: {
+    styleOverrides: {
+      paper: { border: 'none' },
+    },
+  },
+  MuiAppBar: {
+    styleOverrides: {
+      root: { boxShadow: 'none' },
+    },
+  },
+  MuiChip: {
+    styleOverrides: {
+      root: { fontWeight: 500, borderRadius: 6 },
+    },
+  },
+};
+
+export function createAppTheme(mode) {
+  const isLight = mode === 'light';
+
+  return createTheme({
+    palette: {
+      mode,
+      primary: {
+        main: '#4f46e5',
+        light: '#818cf8',
+        dark: '#3730a3',
+        contrastText: '#ffffff',
+      },
+      secondary: {
+        main: '#0891b2',
+        light: '#22d3ee',
+        dark: '#0e7490',
+      },
+      background: {
+        default: isLight ? '#f9fafb' : '#0f1117',
+        paper: isLight ? '#ffffff' : '#1a1d2e',
+      },
+      text: {
+        primary: isLight ? '#111827' : '#f1f5f9',
+        secondary: isLight ? '#6b7280' : '#94a3b8',
+      },
+      divider: isLight ? '#e5e7eb' : '#2d3348',
+      success: { main: '#059669' },
+      warning: { main: '#d97706' },
+      error: { main: '#dc2626' },
+    },
+    typography: baseTypography,
+    shape: { borderRadius: 8 },
+    components: {
+      ...baseComponents,
+      MuiCard: {
+        styleOverrides: {
+          root: {
+            borderRadius: 12,
+            boxShadow: 'none',
+            border: `1px solid ${isLight ? '#e5e7eb' : '#2d3348'}`,
+          },
+        },
+      },
+    },
+  });
+}
