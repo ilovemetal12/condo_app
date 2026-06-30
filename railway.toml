@@ -1,5 +1,5 @@
 [build]
-buildCommand = "cd frontend && npm install --include=dev && npm run build && cd ../backend && npm install && npx prisma generate"
+buildCommand = "npm install --prefix frontend --include=dev && npm run build --prefix frontend && npm install --prefix backend && npx prisma generate --schema=backend/prisma/schema.prisma"
 
 [deploy]
 startCommand = "cd backend && npx prisma migrate deploy && node src/app.js"
