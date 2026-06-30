@@ -19,21 +19,21 @@
     "roles": {
       "super_admin": "Super Admin",
       "community_admin": "Administrador",
-      "reception": "Recepcion",
+      "reception": "Recepci\u00f3n",
       "resident": "Residente"
     }
   },
   "auth": {
-    "signIn": "Iniciar sesion",
-    "signOut": "Cerrar sesion",
-    "email": "Correo electronico",
-    "password": "Contrasena",
+    "signIn": "Iniciar sesi\u00f3n",
+    "signOut": "Cerrar sesi\u00f3n",
+    "email": "Correo electr\u00f3nico",
+    "password": "Contrase\u00f1a",
     "emailPlaceholder": "tu@empresa.com",
-    "passwordPlaceholder": "Ingresa tu contrasena",
+    "passwordPlaceholder": "Ingresa tu contrase\u00f1a",
     "loginTitle": "Bienvenido de nuevo",
-    "loginSubtitle": "Inicia sesion para gestionar tus comunidades",
-    "loginError": "Correo o contrasena invalidos",
-    "loginButton": "Iniciar sesion",
+    "loginSubtitle": "Inicia sesi\u00f3n para gestionar tus comunidades",
+    "loginError": "Correo o contrase\u00f1a inv\u00e1lidos",
+    "loginButton": "Iniciar sesi\u00f3n",
     "secureAccess": "Acceso seguro para personal autorizado"
   },
   "nav": {
@@ -44,11 +44,11 @@
     "residents": "Residentes",
     "employees": "Empleados",
     "visitors": "Visitantes",
-    "packages": "Paquetes",
+    "packages": "Paqueter\u00eda",
     "documents": "Documentos",
     "announcements": "Anuncios",
     "pqrs": "Solicitudes",
-    "settings": "Configuracion"
+    "settings": "Configuraci\u00f3n"
   },
   "dashboard": {
     "welcomeBack": "Bienvenido, {{name}}",
@@ -57,29 +57,35 @@
     "units": "Unidades",
     "residents": "Residentes",
     "packages": "Paquetes",
-    "getStarted": "Comienza aqui",
-    "getStartedDesc": "Crea tu primera comunidad para gestionar unidades, residentes, visitantes y mas."
+    "getStarted": "Comienza aqu\u00ed",
+    "getStartedDesc": "Crea tu primera comunidad para gestionar unidades, residentes, visitantes y m\u00e1s."
   },
   "tenants": {
     "title": "Organizaciones",
-    "createNew": "Nueva organizacion",
+    "createNew": "Nueva organizaci\u00f3n",
     "name": "Nombre",
     "slug": "Identificador",
+    "slugHelp": "Solo min\u00fasculas, n\u00fameros y guiones",
     "plan": "Plan",
+    "planBasic": "B\u00e1sico",
+    "planStandard": "Est\u00e1ndar",
+    "planPremium": "Premium",
     "status": "Estado",
     "communities": "Comunidades",
-    "users": "Usuarios"
+    "users": "Usuarios",
+    "maxCommunities": "M\u00e1x. comunidades",
+    "maxUnits": "M\u00e1x. unidades por comunidad"
   },
   "settings": {
     "theme": "Apariencia",
     "lightMode": "Claro",
     "darkMode": "Oscuro",
     "language": "Idioma",
-    "english": "Ingles",
-    "spanish": "Espanol"
+    "english": "Ingl\u00e9s",
+    "spanish": "Espa\u00f1ol"
   },
   "profile": {
     "title": "Perfil",
-    "signOut": "Cerrar sesion"
+    "signOut": "Cerrar sesi\u00f3n"
   }
 }

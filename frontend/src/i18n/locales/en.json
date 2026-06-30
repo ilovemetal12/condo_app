@@ -65,10 +65,16 @@
     "createNew": "New organization",
     "name": "Name",
     "slug": "Slug",
+    "slugHelp": "Lowercase, numbers, and hyphens only",
     "plan": "Plan",
+    "planBasic": "Basic",
+    "planStandard": "Standard",
+    "planPremium": "Premium",
     "status": "Status",
     "communities": "Communities",
-    "users": "Users"
+    "users": "Users",
+    "maxCommunities": "Max communities",
+    "maxUnits": "Max units per community"
   },
   "settings": {
     "theme": "Appearance",

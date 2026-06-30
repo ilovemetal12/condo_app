@@ -21,7 +21,7 @@ import {
   DialogActions,
   CircularProgress,
   Alert,
-  Fade,
+  MenuItem,
 } from '@mui/material';
 import {
   AddRounded,
@@ -183,10 +183,14 @@ export default function TenantsPage() {
                       <Typography variant="body2" color="text.secondary">{tenant.slug}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Chip label={tenant.subscription?.plan || '-'} size="small" variant="outlined" />
+                      <Chip
+                        label={t(`tenants.plan${(tenant.subscription?.plan || 'basic').charAt(0).toUpperCase() + (tenant.subscription?.plan || 'basic').slice(1)}`)}
+                        size="small"
+                        variant="outlined"
+                      />
                     </TableCell>
                     <TableCell>
-                      <Chip label={tenant.status} size="small" color={statusColor(tenant.status)} />
+                      <Chip label={t(`common.${tenant.status}`)} size="small" color={statusColor(tenant.status)} />
                     </TableCell>
                     <TableCell align="center">{tenant._count?.communities || 0}</TableCell>
                     <TableCell align="center">{tenant._count?.users || 0}</TableCell>
@@ -209,60 +213,60 @@ export default function TenantsPage() {
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>{editing ? t('common.edit') : t('tenants.createNew')}</DialogTitle>
-        <DialogContent sx={{ pt: '16px !important' }}>
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <TextField
-            fullWidth
-            label={t('tenants.name')}
-            value={form.name}
-            onChange={(e) => {
-              setForm({ ...form, name: e.target.value, slug: editing ? form.slug : generateSlug(e.target.value) });
-            }}
-            margin="normal"
-            required
-          />
-          <TextField
-            fullWidth
-            label={t('tenants.slug')}
-            value={form.slug}
-            onChange={(e) => setForm({ ...form, slug: e.target.value })}
-            margin="normal"
-            required
-            helperText="Lowercase, numbers, and hyphens only"
-          />
-          <TextField
-            fullWidth
-            label={t('tenants.plan')}
-            value={form.plan}
-            onChange={(e) => setForm({ ...form, plan: e.target.value })}
-            margin="normal"
-            select
-            SelectProps={{ native: true }}
-          >
-            <option value="basic">Basic</option>
-            <option value="standard">Standard</option>
-            <option value="premium">Premium</option>
-          </TextField>
-          <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+        <DialogContent>
+          <Box sx={{ pt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {error && <Alert severity="error">{error}</Alert>}
+
             <TextField
               fullWidth
-              label="Max communities"
-              type="number"
-              value={form.maxCommunities}
-              onChange={(e) => setForm({ ...form, maxCommunities: e.target.value })}
-              margin="normal"
+              label={t('tenants.name')}
+              value={form.name}
+              onChange={(e) => {
+                setForm({ ...form, name: e.target.value, slug: editing ? form.slug : generateSlug(e.target.value) });
+              }}
+              required
             />
+
             <TextField
               fullWidth
-              label="Max units per community"
-              type="number"
-              value={form.maxUnitsPerCommunity}
-              onChange={(e) => setForm({ ...form, maxUnitsPerCommunity: e.target.value })}
-              margin="normal"
+              label={t('tenants.slug')}
+              value={form.slug}
+              onChange={(e) => setForm({ ...form, slug: e.target.value })}
+              required
+              helperText={t('tenants.slugHelp')}
             />
+
+            <TextField
+              fullWidth
+              label={t('tenants.plan')}
+              value={form.plan}
+              onChange={(e) => setForm({ ...form, plan: e.target.value })}
+              select
+            >
+              <MenuItem value="basic">{t('tenants.planBasic')}</MenuItem>
+              <MenuItem value="standard">{t('tenants.planStandard')}</MenuItem>
+              <MenuItem value="premium">{t('tenants.planPremium')}</MenuItem>
+            </TextField>
+
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                fullWidth
+                label={t('tenants.maxCommunities')}
+                type="number"
+                value={form.maxCommunities}
+                onChange={(e) => setForm({ ...form, maxCommunities: e.target.value })}
+              />
+              <TextField
+                fullWidth
+                label={t('tenants.maxUnits')}
+                type="number"
+                value={form.maxUnitsPerCommunity}
+                onChange={(e) => setForm({ ...form, maxUnitsPerCommunity: e.target.value })}
+              />
+            </Box>
           </Box>
         </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
+        <DialogActions sx={{ px: 3, pb: 2.5 }}>
           <Button onClick={() => setDialogOpen(false)}>{t('common.cancel')}</Button>
           <Button variant="contained" onClick={handleSubmit} disabled={!form.name || !form.slug}>
             {editing ? t('common.save') : t('common.create')}
