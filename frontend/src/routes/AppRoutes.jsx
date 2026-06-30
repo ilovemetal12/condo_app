@@ -4,6 +4,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 import LoginPage from '../pages/auth/LoginPage';
 import DashboardPage from '../pages/dashboard/DashboardPage';
+import TenantsPage from '../pages/tenants/TenantsPage';
 
 export default function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ export default function AppRoutes() {
           }
         >
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/tenants" element={<TenantsPage />} />
         </Route>
 
         {/* Catch-all redirect */}
