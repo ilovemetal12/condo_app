@@ -1,91 +1,57 @@
 {
-  "common": {
-    "appName": "CondoSaaS",
-    "loading": "Cargando...",
-    "save": "Guardar",
-    "cancel": "Cancelar",
-    "delete": "Eliminar",
-    "edit": "Editar",
-    "create": "Crear",
-    "search": "Buscar",
-    "filter": "Filtrar",
-    "actions": "Acciones",
-    "status": "Estado",
-    "active": "Activo",
-    "inactive": "Inactivo",
-    "confirm": "Confirmar",
-    "back": "Volver",
-    "noResults": "No se encontraron resultados",
-    "roles": {
-      "super_admin": "Super Admin",
-      "community_admin": "Administrador",
-      "reception": "Recepci\u00f3n",
-      "resident": "Residente"
-    }
-  },
-  "auth": {
-    "signIn": "Iniciar sesi\u00f3n",
-    "signOut": "Cerrar sesi\u00f3n",
+  "login": {
+    "title": "Bienvenido",
+    "subtitle": "Inicia sesi\u00f3n en tu cuenta",
     "email": "Correo electr\u00f3nico",
     "password": "Contrase\u00f1a",
-    "emailPlaceholder": "tu@empresa.com",
-    "passwordPlaceholder": "Ingresa tu contrase\u00f1a",
-    "loginTitle": "Bienvenido de nuevo",
-    "loginSubtitle": "Inicia sesi\u00f3n para gestionar tus comunidades",
-    "loginError": "Correo o contrase\u00f1a inv\u00e1lidos",
-    "loginButton": "Iniciar sesi\u00f3n",
-    "secureAccess": "Acceso seguro para personal autorizado"
+    "button": "Iniciar sesi\u00f3n",
+    "error": "Credenciales inv\u00e1lidas"
   },
-  "nav": {
+  "sidebar": {
     "dashboard": "Panel",
     "tenants": "Organizaciones",
     "communities": "Comunidades",
     "units": "Unidades",
     "residents": "Residentes",
-    "employees": "Empleados",
     "visitors": "Visitantes",
-    "packages": "Paqueter\u00eda",
-    "documents": "Documentos",
-    "announcements": "Anuncios",
-    "pqrs": "Solicitudes",
-    "settings": "Configuraci\u00f3n"
+    "packages": "Paqueter\u00eda"
+  },
+  "topbar": {
+    "signOut": "Cerrar sesi\u00f3n"
   },
   "dashboard": {
-    "welcomeBack": "Bienvenido, {{name}}",
-    "overview": "Este es un resumen de tu plataforma.",
+    "welcome": "Bienvenido, {{name}}",
+    "subtitle": "Resumen de la plataforma",
     "communities": "Comunidades",
     "units": "Unidades",
     "residents": "Residentes",
-    "packages": "Paquetes",
-    "getStarted": "Comienza aqu\u00ed",
-    "getStartedDesc": "Crea tu primera comunidad para gestionar unidades, residentes, visitantes y m\u00e1s."
+    "packages": "Paquetes pendientes",
+    "emptyTitle": "Sin datos a\u00fan",
+    "emptyText": "Crea tu primera organizaci\u00f3n para comenzar."
   },
   "tenants": {
     "title": "Organizaciones",
-    "createNew": "Nueva organizaci\u00f3n",
+    "add": "Agregar",
     "name": "Nombre",
-    "slug": "Identificador",
-    "slugHelp": "Solo min\u00fasculas, n\u00fameros y guiones",
+    "identifier": "Identificador",
+    "identifierHelp": "Min\u00fasculas, n\u00fameros y guiones",
     "plan": "Plan",
-    "planBasic": "B\u00e1sico",
-    "planStandard": "Est\u00e1ndar",
-    "planPremium": "Premium",
-    "status": "Estado",
-    "communities": "Comunidades",
-    "users": "Usuarios",
+    "plans": { "basic": "B\u00e1sico", "standard": "Est\u00e1ndar", "premium": "Premium" },
     "maxCommunities": "M\u00e1x. comunidades",
-    "maxUnits": "M\u00e1x. unidades por comunidad"
+    "maxUnits": "M\u00e1x. unidades",
+    "status": "Estado",
+    "statuses": { "active": "Activo", "suspended": "Suspendido", "cancelled": "Cancelado" },
+    "users": "Usuarios",
+    "noResults": "No se encontraron organizaciones",
+    "confirmDelete": "\u00bfEliminar esta organizaci\u00f3n?"
   },
-  "settings": {
-    "theme": "Apariencia",
-    "lightMode": "Claro",
-    "darkMode": "Oscuro",
-    "language": "Idioma",
-    "english": "Ingl\u00e9s",
-    "spanish": "Espa\u00f1ol"
-  },
-  "profile": {
-    "title": "Perfil",
-    "signOut": "Cerrar sesi\u00f3n"
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "search": "Buscar...",
+    "actions": "Acciones"
   }
 }

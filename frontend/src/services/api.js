@@ -1,52 +1,41 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
-
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Request interceptor: attach access token
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+api.interceptors.request.use((cfg) => {
+  const t = localStorage.getItem('token');
+  if (t) cfg.headers.Authorization = `Bearer ${t}`;
+  return cfg;
 });
 
-// Response interceptor: handle token refresh on 401
 api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (refreshToken) {
+  (r) => r,
+  async (err) => {
+    const orig = err.config;
+    if (err.response?.status === 401 && !orig._retry) {
+      orig._retry = true;
+      const refresh = localStorage.getItem('refresh');
+      if (refresh) {
         try {
-          const { data } = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
-          const { accessToken, refreshToken: newRefresh } = data.data;
-
-          localStorage.setItem('accessToken', accessToken);
-          localStorage.setItem('refreshToken', newRefresh);
-
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          return api(originalRequest);
-        } catch (refreshErr) {
-          // Refresh failed, clear auth and redirect
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
+          const { data } = await axios.post(
+            (import.meta.env.VITE_API_URL || '/api') + '/auth/refresh',
+            { refreshToken: refresh }
+          );
+          localStorage.setItem('token', data.data.accessToken);
+          localStorage.setItem('refresh', data.data.refreshToken);
+          orig.headers.Authorization = `Bearer ${data.data.accessToken}`;
+          return api(orig);
+        } catch {
+          localStorage.removeItem('token');
+          localStorage.removeItem('refresh');
           window.location.href = '/login';
-          return Promise.reject(refreshErr);
         }
       }
     }
-
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 

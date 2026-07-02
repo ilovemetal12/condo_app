@@ -1,91 +1,57 @@
 {
-  "common": {
-    "appName": "CondoSaaS",
-    "loading": "Loading...",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "search": "Search",
-    "filter": "Filter",
-    "actions": "Actions",
-    "status": "Status",
-    "active": "Active",
-    "inactive": "Inactive",
-    "confirm": "Confirm",
-    "back": "Back",
-    "noResults": "No results found",
-    "roles": {
-      "super_admin": "Super Admin",
-      "community_admin": "Admin",
-      "reception": "Reception",
-      "resident": "Resident"
-    }
-  },
-  "auth": {
-    "signIn": "Sign in",
-    "signOut": "Sign out",
+  "login": {
+    "title": "Welcome",
+    "subtitle": "Sign in to your account",
     "email": "Email",
     "password": "Password",
-    "emailPlaceholder": "you@company.com",
-    "passwordPlaceholder": "Enter your password",
-    "loginTitle": "Welcome back",
-    "loginSubtitle": "Sign in to manage your communities",
-    "loginError": "Invalid email or password",
-    "loginButton": "Sign in",
-    "secureAccess": "Secure access for authorized personnel"
+    "button": "Sign in",
+    "error": "Invalid credentials"
   },
-  "nav": {
+  "sidebar": {
     "dashboard": "Dashboard",
     "tenants": "Organizations",
     "communities": "Communities",
     "units": "Units",
     "residents": "Residents",
-    "employees": "Employees",
     "visitors": "Visitors",
-    "packages": "Packages",
-    "documents": "Documents",
-    "announcements": "Announcements",
-    "pqrs": "Requests",
-    "settings": "Settings"
+    "packages": "Packages"
+  },
+  "topbar": {
+    "signOut": "Sign out"
   },
   "dashboard": {
-    "welcomeBack": "Welcome back, {{name}}",
-    "overview": "Here is an overview of your platform.",
+    "welcome": "Welcome, {{name}}",
+    "subtitle": "Platform overview",
     "communities": "Communities",
     "units": "Units",
     "residents": "Residents",
-    "packages": "Packages",
-    "getStarted": "Get started",
-    "getStartedDesc": "Create your first community to begin managing units, residents, visitors, and more."
+    "packages": "Pending packages",
+    "emptyTitle": "No data yet",
+    "emptyText": "Create your first organization to get started."
   },
   "tenants": {
     "title": "Organizations",
-    "createNew": "New organization",
+    "add": "Add",
     "name": "Name",
-    "slug": "Slug",
-    "slugHelp": "Lowercase, numbers, and hyphens only",
+    "identifier": "Identifier",
+    "identifierHelp": "Lowercase letters, numbers and hyphens",
     "plan": "Plan",
-    "planBasic": "Basic",
-    "planStandard": "Standard",
-    "planPremium": "Premium",
+    "plans": { "basic": "Basic", "standard": "Standard", "premium": "Premium" },
+    "maxCommunities": "Max. communities",
+    "maxUnits": "Max. units",
     "status": "Status",
-    "communities": "Communities",
+    "statuses": { "active": "Active", "suspended": "Suspended", "cancelled": "Cancelled" },
     "users": "Users",
-    "maxCommunities": "Max communities",
-    "maxUnits": "Max units per community"
+    "noResults": "No organizations found",
+    "confirmDelete": "Delete this organization?"
   },
-  "settings": {
-    "theme": "Appearance",
-    "lightMode": "Light",
-    "darkMode": "Dark",
-    "language": "Language",
-    "english": "English",
-    "spanish": "Spanish"
-  },
-  "profile": {
-    "title": "Profile",
-    "signOut": "Sign out"
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search...",
+    "actions": "Actions"
   }
 }
